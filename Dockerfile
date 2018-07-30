@@ -4,7 +4,6 @@ FROM linuxserver/radarr
 RUN \ 
     apt-get update && \ 
     apt-get install -y ffmpeg git python-pip openssl python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev zlib1g-dev && \ 
-    pip install --upgrade pip && \ 
     pip install requests && \ 
     pip install requests[security] && \ 
     pip install requests-cache && \ 
