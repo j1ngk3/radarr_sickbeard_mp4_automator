@@ -1,0 +1,30 @@
+---
+# This workflow requires a DOCKER_USERNAME & DOCKER_PASSWORD secret present in the GitHub
+# repository or organization.
+
+name: Release
+'on':
+  push:
+    branches:
+      - master
+  schedule:
+      - cron: "0 7 * * 0"
+
+jobs:
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: >-
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build docker image
+        run: ./build.sh
+
+      - name: Push Docker image
+        run: docker push jingke/radarr_sickbeard_mp4_automator:latest
