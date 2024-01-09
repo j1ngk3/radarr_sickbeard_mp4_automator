@@ -1,28 +1,26 @@
-# Version 1.2
+FROM linuxserver/radarr as build
+
+RUN apk update && apk add --no-cache \
+        git \
+        python3 \
+        py3-pip \
+        py3-virtualenv
+
+RUN mkdir /sickbeard_mp4_automator/ && \
+    git config --global --add safe.directory /sickbeard_mp4_automator/ && \
+    git clone https://github.com/mdhiggins/sickbeard_mp4_automator.git /sickbeard_mp4_automator/
+
+RUN python3 -m virtualenv /sickbeard_mp4_automator/venv && \
+    /sickbeard_mp4_automator/venv/bin/pip install -r /sickbeard_mp4_automator/setup/requirements.txt
+
 FROM linuxserver/radarr
 
 RUN apk add --no-cache \
         ffmpeg \
-        git \
-        py3-pip \
-        openssl \
-        python3-dev \
-        libffi-dev \
-        openssl-dev \
-        libxml2-dev \
-        libxslt-dev \
-        musl-dev \
-        g++ \
-        gcc \
-        file \
-        zlib-dev 
+        curl \
+        python3
 
-RUN git clone https://github.com/mdhiggins/sickbeard_mp4_automator.git /sickbeard_mp4_automator/ && \  
-    touch /sickbeard_mp4_automator/info.log && \ 
-    chmod a+rwx -R /sickbeard_mp4_automator
+RUN mkdir /sickbeard_mp4_automator/
 
-RUN pip3 install --upgrade pip
-
-RUN pip3 install -r /sickbeard_mp4_automator/setup/requirements.txt && \
-    pip3 install -r /sickbeard_mp4_automator/setup/requirements-deluge.txt && \
-    pip3 install -r /sickbeard_mp4_automator/setup/requirements-qbittorrent.txt
+COPY --from=build /sickbeard_mp4_automator/ /sickbeard_mp4_automator/
+`
