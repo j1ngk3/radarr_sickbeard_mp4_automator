@@ -23,4 +23,3 @@ RUN apk add --no-cache \
 RUN mkdir /sickbeard_mp4_automator/
 
 COPY --from=build /sickbeard_mp4_automator/ /sickbeard_mp4_automator/
-`
